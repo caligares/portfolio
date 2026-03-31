@@ -1,699 +1,828 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gabriela Castro Caligares — Portfólio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;0,900;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
       --white: #FFFFFF;
-      --off-white: #F7F7F5;
-      --light-gray: #E8E8E4;
-      --mid-gray: #ABABAB;
+      --off-white: #F6F6F4;
+      --light-gray: #E6E6E2;
+      --mid-gray: #AEAEAE;
       --dark-gray: #3A3A3A;
       --black: #111111;
-      --accent: #1A1A1A;
     }
- 
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
     html { scroll-behavior: smooth; }
- 
+
     body {
       font-family: 'Raleway', sans-serif;
       background: var(--white);
       color: var(--black);
       overflow-x: hidden;
+      cursor: none;
     }
- 
-    /* ─── NAV ─── */
+
+    /* ══════════════════════════════
+       CURSOR — Figma / Apple style
+    ══════════════════════════════ */
+    #c-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 6px; height: 6px;
+      background: var(--black);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .15s, height .15s, background .15s, opacity .15s;
+      will-change: transform;
+    }
+    #c-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 32px; height: 32px;
+      border: 1px solid rgba(17,17,17,.35);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width .3s cubic-bezier(.23,1,.32,1),
+                  height .3s cubic-bezier(.23,1,.32,1),
+                  border-color .3s,
+                  opacity .2s;
+      will-change: transform;
+    }
+    body.hovering #c-dot  { width: 4px; height: 4px; opacity: .5; }
+    body.hovering #c-ring { width: 54px; height: 54px; border-color: rgba(17,17,17,.15); }
+    body.clicking #c-dot  { width: 10px; height: 10px; }
+    body.clicking #c-ring { width: 22px; height: 22px; border-color: rgba(17,17,17,.8); }
+
+    /* ══════════════════════════════
+       NAV
+    ══════════════════════════════ */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
+      z-index: 200;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.4rem 4rem;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--light-gray);
+      padding: 1.3rem 4rem;
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      transition: padding .4s ease, background .4s ease;
     }
- 
+    nav.scrolled { padding: .9rem 4rem; background: rgba(255,255,255,.97); }
+
     .nav-logo {
       font-family: 'Montserrat', sans-serif;
       font-weight: 900;
-      font-size: 1rem;
-      letter-spacing: 0.12em;
+      font-size: .9rem;
+      letter-spacing: .15em;
       text-transform: uppercase;
       color: var(--black);
       text-decoration: none;
+      position: relative;
     }
- 
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
+    .nav-logo::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 2px;
+      background: var(--black);
+      transition: width .3s;
     }
- 
+    .nav-logo:hover::after { width: 100%; }
+
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
     .nav-links a {
       font-family: 'Montserrat', sans-serif;
       font-weight: 500;
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
+      font-size: .72rem;
+      letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--mid-gray);
       text-decoration: none;
-      transition: color 0.2s;
+      position: relative;
+      transition: color .2s;
     }
- 
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--black);
+      transition: width .25s ease;
+    }
     .nav-links a:hover { color: var(--black); }
- 
-    /* ─── HERO ─── */
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ══════════════════════════════
+       HERO
+    ══════════════════════════════ */
     #hero {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: flex-start;
-      padding: 0 4rem 0 4rem;
+      padding: 0 4rem;
       position: relative;
       overflow: hidden;
-      background: var(--white);
     }
- 
-    .hero-bg-line {
+
+    .hero-blob {
       position: absolute;
-      top: 0; right: 8rem;
-      width: 1px;
-      height: 100%;
-      background: var(--light-gray);
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: .12;
+      pointer-events: none;
+      will-change: transform;
     }
-    .hero-bg-line-2 {
+    .hero-blob-1 {
+      width: 620px; height: 620px;
+      background: radial-gradient(circle, #bbb, #888);
+      top: -160px; right: -80px;
+    }
+    .hero-blob-2 {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, #ccc, #aaa);
+      bottom: -80px; right: 18%;
+    }
+    .hero-blob-3 {
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, #ddd, #bbb);
+      top: 35%; left: 58%;
+    }
+    @keyframes blobFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      33%  { transform: translateY(-28px) scale(1.04); }
+      66%  { transform: translateY(18px) scale(.97); }
+    }
+
+    .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .particle {
       position: absolute;
-      top: 0; right: 24rem;
-      width: 1px;
-      height: 100%;
-      background: var(--light-gray);
-      opacity: 0.5;
+      width: 2px; height: 2px;
+      background: var(--mid-gray);
+      border-radius: 50%;
+      opacity: 0;
+      animation: particleDrift linear infinite;
     }
- 
+    @keyframes particleDrift {
+      0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10%  { opacity: .35; }
+      90%  { opacity: .15; }
+      100% { transform: translateY(-10vh) translateX(40px); opacity: 0; }
+    }
+
+    .hero-rule {
+      position: absolute;
+      top: 0; width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, var(--light-gray) 30%, var(--light-gray) 70%, transparent);
+      pointer-events: none;
+    }
+    .hero-rule-1 { right: 10rem; }
+    .hero-rule-2 { right: 26rem; opacity: .4; }
+
     .hero-eyebrow {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
+      font-size: .68rem; font-weight: 500;
+      letter-spacing: .28em; text-transform: uppercase;
       color: var(--mid-gray);
       margin-bottom: 1.5rem;
       opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.3s;
+      animation: fadeUp .8s ease forwards .3s;
+      display: flex; align-items: center; gap: .8rem;
     }
- 
+    .hero-eyebrow::before {
+      content: '';
+      width: 22px; height: 1px;
+      background: var(--mid-gray);
+    }
+
     .hero-heading {
       font-family: 'Montserrat', sans-serif;
       font-weight: 900;
-      font-size: clamp(2.8rem, 7vw, 6rem);
-      line-height: 1.05;
+      font-size: clamp(2.6rem, 7vw, 5.8rem);
+      line-height: 1.06;
       color: var(--black);
       margin-bottom: 2rem;
-      max-width: 700px;
+      max-width: 740px;
       opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.5s;
+      animation: fadeUp .8s ease forwards .5s;
     }
- 
-    /* ─── TYPING ANIMATION ─── */
-    .typing-wrapper {
+
+    .typed-text { font-family: 'Montserrat', sans-serif; font-weight: 900; }
+    .cursor-blink {
       display: inline-block;
-      position: relative;
-    }
- 
-    .typed-text {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 900;
-      color: var(--black);
-    }
- 
-    .cursor {
-      display: inline-block;
-      width: 3px;
-      height: 0.85em;
+      width: 3px; height: .85em;
       background: var(--black);
-      margin-left: 2px;
+      margin-left: 3px;
       vertical-align: text-bottom;
-      animation: blink 0.7s step-end infinite;
+      animation: blink .65s step-end infinite;
     }
- 
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
- 
+    @keyframes blink { 50% { opacity: 0; } }
+
     .hero-sub {
-      font-family: 'Raleway', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 400;
+      font-size: 1rem; font-weight: 400;
       color: var(--mid-gray);
-      max-width: 520px;
-      line-height: 1.75;
-      margin-bottom: 2.5rem;
+      max-width: 500px; line-height: 1.85;
+      margin-bottom: 2.8rem;
       opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.9s;
+      animation: fadeUp .8s ease forwards .9s;
     }
- 
-    .hero-cta {
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 1.5rem;
+      opacity: 0;
+      animation: fadeUp .8s ease forwards 1.1s;
+    }
+    .btn-primary {
       display: inline-block;
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
       color: var(--white);
       background: var(--black);
       padding: 1rem 2rem;
       text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 1.1s;
+      position: relative; overflow: hidden;
+      transition: color .3s;
     }
- 
-    .hero-cta:hover {
-      background: var(--dark-gray);
+    .btn-primary::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(120deg, #444 0%, #111 100%);
+      transform: translateX(-100%);
+      transition: transform .3s ease;
     }
- 
-    .hero-scroll-hint {
-      position: absolute;
-      bottom: 2.5rem;
-      left: 4rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+    .btn-primary:hover::before { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+
+    .btn-ghost {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--black); text-decoration: none;
+      border-bottom: 1px solid var(--light-gray);
+      padding-bottom: 2px;
+      transition: border-color .2s;
+    }
+    .btn-ghost:hover { border-color: var(--black); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem; left: 4rem;
+      display: flex; align-items: center; gap: .7rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .6rem; letter-spacing: .22em; text-transform: uppercase;
       color: var(--mid-gray);
       opacity: 0;
-      animation: fadeUp 0.8s ease forwards 1.4s;
+      animation: fadeUp .8s ease forwards 1.5s;
     }
- 
-    .hero-scroll-hint::before {
-      content: '';
-      display: inline-block;
-      width: 30px;
-      height: 1px;
+    .scroll-line {
+      width: 28px; height: 1px;
       background: var(--mid-gray);
+      position: relative; overflow: hidden;
     }
- 
-    /* ─── SECTIONS SHARED ─── */
-    section {
-      padding: 7rem 4rem;
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: var(--black);
+      animation: scrollLine 1.8s ease infinite 2s;
     }
- 
+    @keyframes scrollLine {
+      0%   { left: -100%; }
+      50%  { left: 0; }
+      100% { left: 100%; }
+    }
+
+    .hero-stats {
+      position: absolute;
+      bottom: 0; right: 0;
+      display: flex;
+      border-top: 1px solid var(--light-gray);
+      border-left: 1px solid var(--light-gray);
+      opacity: 0;
+      animation: fadeUp .8s ease forwards 1.3s;
+    }
+    .hero-stat {
+      padding: 1.2rem 2rem;
+      border-right: 1px solid var(--light-gray);
+      text-align: center;
+    }
+    .hero-stat-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900; font-size: 1.8rem;
+      color: var(--black);
+      display: block; line-height: 1;
+    }
+    .hero-stat-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .58rem; font-weight: 500;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--mid-gray);
+      display: block; margin-top: .3rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ══════════════════════════════
+       SHARED
+    ══════════════════════════════ */
+    section { padding: 7rem 4rem; }
+
     .section-label {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
+      font-size: .62rem; font-weight: 700;
+      letter-spacing: .32em; text-transform: uppercase;
       color: var(--mid-gray);
       margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+      display: flex; align-items: center; gap: .7rem;
     }
- 
     .section-label::after {
-      content: '';
-      flex: 1;
-      max-width: 40px;
-      height: 1px;
-      background: var(--light-gray);
+      content: ''; flex: 1; max-width: 36px;
+      height: 1px; background: var(--light-gray);
     }
- 
     .section-title {
       font-family: 'Montserrat', sans-serif;
       font-weight: 900;
-      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-size: clamp(1.9rem, 4vw, 3rem);
       color: var(--black);
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
       line-height: 1.1;
     }
- 
-    /* ─── SOBRE MIM ─── */
+
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .stagger > * {
+      opacity: 0; transform: translateY(18px);
+      transition: opacity .5s ease, transform .5s ease;
+    }
+    .stagger.visible > *:nth-child(1) { transition-delay: 0s; }
+    .stagger.visible > *:nth-child(2) { transition-delay: .08s; }
+    .stagger.visible > *:nth-child(3) { transition-delay: .16s; }
+    .stagger.visible > *:nth-child(4) { transition-delay: .24s; }
+    .stagger.visible > *:nth-child(5) { transition-delay: .32s; }
+    .stagger.visible > *:nth-child(6) { transition-delay: .40s; }
+    .stagger.visible > *:nth-child(7) { transition-delay: .48s; }
+    .stagger.visible > *:nth-child(8) { transition-delay: .56s; }
+    .stagger.visible > *:nth-child(9) { transition-delay: .64s; }
+    .stagger.visible > * { opacity: 1; transform: translateY(0); }
+
+    /* ══════════════════════════════
+       SOBRE
+    ══════════════════════════════ */
     #sobre {
       background: var(--white);
       border-top: 1px solid var(--light-gray);
     }
- 
     .sobre-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: start;
+      grid-template-columns: 1fr 420px;
+      gap: 5rem; align-items: start;
     }
- 
     .sobre-text p {
-      font-size: 1rem;
-      line-height: 1.9;
-      color: var(--dark-gray);
-      font-weight: 400;
-      margin-bottom: 1.5rem;
+      font-size: .97rem; line-height: 1.95;
+      color: var(--dark-gray); font-weight: 400;
+      margin-bottom: 1.4rem;
     }
- 
-    .sobre-highlight {
+    .sobre-text strong { color: var(--black); font-weight: 700; }
+
+    .sobre-award {
+      margin-top: 2rem;
+      padding: 1.4rem 1.6rem;
       background: var(--off-white);
       border-left: 3px solid var(--black);
-      padding: 1.2rem 1.5rem;
+      position: relative; overflow: hidden;
+    }
+    .sobre-award::after {
+      content: '✦';
+      position: absolute;
+      right: 1.2rem; top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: var(--light-gray);
+      animation: spin 9s linear infinite;
+    }
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+    .sobre-award p {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--dark-gray);
-      line-height: 1.7;
-      margin-top: 2rem;
+      font-size: .85rem; font-weight: 500;
+      color: var(--dark-gray); line-height: 1.7; margin: 0;
     }
- 
-    .sobre-aside {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
- 
+
+    .sobre-aside { display: flex; flex-direction: column; gap: 1.5rem; }
     .aside-card {
       border: 1px solid var(--light-gray);
       padding: 1.8rem;
+      background: var(--white);
+      transition: border-color .3s, box-shadow .3s;
+      position: relative; overflow: hidden;
     }
- 
+    .aside-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--mid-gray), transparent);
+      transform: scaleX(0);
+      transition: transform .4s ease;
+    }
+    .aside-card:hover::before { transform: scaleX(1); }
+    .aside-card:hover {
+      border-color: #ccc;
+      box-shadow: 0 8px 32px rgba(0,0,0,.06);
+    }
     .aside-card h4 {
       font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      font-weight: 700; font-size: .62rem;
+      letter-spacing: .22em; text-transform: uppercase;
       color: var(--mid-gray);
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.3rem;
+      padding-bottom: .8rem;
+      border-bottom: 1px solid var(--light-gray);
     }
- 
-    /* ─── IDIOMAS ─── */
-    .lang-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
+
+    .lang-row { margin-bottom: 1.1rem; }
+    .lang-row:last-child { margin-bottom: 0; }
+    .lang-top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: .4rem;
     }
- 
     .lang-name {
       font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      font-size: 0.9rem;
+      font-weight: 700; font-size: .88rem;
       color: var(--black);
     }
- 
     .lang-badge {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      background: var(--black);
-      color: var(--white);
-      padding: 0.3rem 0.7rem;
+      font-size: .6rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      background: var(--black); color: var(--white);
+      padding: .25rem .6rem;
     }
- 
-    .lang-level {
-      font-size: 0.8rem;
-      color: var(--mid-gray);
-      font-family: 'Raleway', sans-serif;
-    }
- 
     .lang-bar {
-      height: 2px;
-      background: var(--light-gray);
-      margin-top: 0.4rem;
-      margin-bottom: 1rem;
-      position: relative;
+      height: 2px; background: var(--light-gray);
+      position: relative; overflow: hidden;
     }
- 
     .lang-bar-fill {
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      background: var(--black);
-      transition: width 1s ease;
+      position: absolute; top: 0; left: 0; bottom: 0;
+      background: linear-gradient(90deg, var(--dark-gray), var(--black));
+      width: 0;
+      transition: width 1.2s cubic-bezier(.23,1,.32,1);
     }
- 
-    /* ─── INTERESSES ─── */
-    .interest-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
- 
+
+    .interest-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
     .interest-tag {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
+      font-size: .7rem; font-weight: 500;
       color: var(--dark-gray);
       background: var(--off-white);
       border: 1px solid var(--light-gray);
-      padding: 0.4rem 0.85rem;
+      padding: .35rem .8rem;
+      transition: background .2s, color .2s, border-color .2s, transform .15s;
     }
- 
-    /* ─── EXPERIÊNCIAS ─── */
-    #experiencias {
-      background: var(--off-white);
+    .interest-tag:hover {
+      background: var(--black); color: var(--white);
+      border-color: var(--black);
+      transform: translateY(-2px);
+    }
+
+    .social-links { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .social-link {
+      display: inline-flex; align-items: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--dark-gray); text-decoration: none;
+      padding: .55rem 1rem;
+      border: 1px solid var(--light-gray);
+      position: relative; overflow: hidden;
+      transition: color .3s;
+    }
+    .social-link::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--black);
+      transform: translateY(101%);
+      transition: transform .25s ease;
+    }
+    .social-link:hover { color: var(--white); }
+    .social-link:hover::before { transform: translateY(0); }
+    .social-link span { position: relative; z-index: 1; }
+
+    /* ══════════════════════════════
+       HABILIDADES
+    ══════════════════════════════ */
+    #habilidades {
       border-top: 1px solid var(--light-gray);
+      position: relative; overflow: hidden;
+      background: linear-gradient(150deg, var(--off-white) 0%, var(--white) 55%, var(--off-white) 100%);
     }
- 
-    .exp-tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 3.5rem;
-      border-bottom: 1px solid var(--light-gray);
-    }
- 
-    .exp-tab {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--mid-gray);
-      padding: 0.8rem 1.5rem;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      background: none;
-      border-top: none;
-      border-left: none;
-      border-right: none;
-      transition: color 0.2s, border-color 0.2s;
-    }
- 
-    .exp-tab.active {
-      color: var(--black);
-      border-bottom-color: var(--black);
-    }
- 
-    .exp-panel { display: none; }
-    .exp-panel.active { display: block; }
- 
-    .exp-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
- 
-    .exp-item {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 2.5rem;
-      padding: 2.5rem 0;
-      border-bottom: 1px solid var(--light-gray);
-      transition: background 0.2s;
-    }
- 
-    .exp-item:last-child { border-bottom: none; }
- 
-    .exp-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
- 
-    .exp-date {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--mid-gray);
-    }
- 
-    .exp-company {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--black);
-    }
- 
-    .exp-type {
-      font-size: 0.75rem;
-      color: var(--mid-gray);
-      font-family: 'Raleway', sans-serif;
-    }
- 
-    .exp-role {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--black);
-      margin-bottom: 0.75rem;
-    }
- 
-    .exp-desc {
-      font-size: 0.92rem;
-      line-height: 1.8;
-      color: var(--dark-gray);
-      font-family: 'Raleway', sans-serif;
-    }
- 
-    /* ─── TEXTOS AUTORAIS ─── */
-    #textos {
-      background: var(--white);
-      border-top: 1px solid var(--light-gray);
-    }
- 
-    .textos-intro {
-      max-width: 600px;
-      font-size: 1rem;
-      line-height: 1.85;
-      color: var(--dark-gray);
-      margin-bottom: 4rem;
-    }
- 
-    .textos-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-    }
- 
-    .texto-card {
-      background: var(--off-white);
-      padding: 2.5rem 2rem;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
- 
-    .texto-card::before {
+    #habilidades::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0;
-      width: 100%; height: 3px;
-      background: var(--black);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(180,180,180,.15) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      animation: blobFloat 11s ease-in-out infinite;
+      pointer-events: none;
     }
- 
-    .texto-card:hover::before { transform: scaleX(1); }
-    .texto-card:hover { background: var(--light-gray); }
- 
-    .texto-num {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      color: var(--mid-gray);
-      margin-bottom: 1.2rem;
-    }
- 
-    .texto-title {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--black);
-      margin-bottom: 0.5rem;
-      line-height: 1.3;
-    }
- 
-    .texto-ref {
-      font-size: 0.75rem;
-      color: var(--mid-gray);
-      font-family: 'Raleway', sans-serif;
-      margin-bottom: 1rem;
-      font-style: italic;
-    }
- 
-    .texto-body {
-      font-size: 0.88rem;
-      line-height: 1.8;
-      color: var(--dark-gray);
-      font-family: 'Raleway', sans-serif;
-    }
- 
-    /* ─── FOOTER ─── */
-    footer {
-      padding: 3rem 4rem;
-      border-top: 1px solid var(--light-gray);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--white);
-    }
- 
-    .footer-name {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 900;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--black);
-    }
- 
-    .footer-note {
-      font-size: 0.75rem;
-      color: var(--mid-gray);
-      font-family: 'Raleway', sans-serif;
-    }
- 
-    /* ─── ANIMATIONS ─── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
- 
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
- 
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
- 
-    /* ─── HABILIDADES ─── */
-    #habilidades {
-      background: var(--off-white);
-      border-top: 1px solid var(--light-gray);
-    }
- 
+
     .skills-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 2px;
     }
- 
     .skill-group {
       background: var(--white);
-      padding: 2rem 2.2rem;
+      padding: 2.2rem;
+      transition: transform .3s ease, box-shadow .3s ease;
+      position: relative; overflow: hidden;
     }
- 
+    .skill-group::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: linear-gradient(90deg, var(--black), var(--dark-gray));
+      transition: width .4s ease;
+    }
+    .skill-group:hover::after { width: 100%; }
+    .skill-group:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.07);
+    }
     .skill-group h4 {
       font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      font-size: 0.65rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
+      font-weight: 700; font-size: .62rem;
+      letter-spacing: .22em; text-transform: uppercase;
       color: var(--mid-gray);
-      margin-bottom: 1.2rem;
-      padding-bottom: 0.8rem;
+      margin-bottom: 1.3rem;
+      padding-bottom: .8rem;
       border-bottom: 1px solid var(--light-gray);
     }
- 
-    .skill-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.45rem;
-    }
- 
+    .skill-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
     .skill-tag {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 500;
+      font-size: .7rem; font-weight: 500;
       color: var(--dark-gray);
       background: var(--off-white);
       border: 1px solid var(--light-gray);
-      padding: 0.35rem 0.8rem;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      padding: .35rem .8rem;
+      transition: background .2s, color .2s, border-color .2s, transform .15s;
     }
- 
     .skill-tag:hover {
-      background: var(--black);
-      color: var(--white);
+      background: var(--black); color: var(--white);
       border-color: var(--black);
+      transform: translateY(-2px);
     }
- 
-    /* ─── LINKS ─── */
-    .social-links {
+
+    /* ══════════════════════════════
+       EXPERIÊNCIAS
+    ══════════════════════════════ */
+    #experiencias {
+      background: var(--white);
+      border-top: 1px solid var(--light-gray);
+    }
+    .exp-tabs {
       display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
+      margin-bottom: 3.5rem;
+      border-bottom: 1px solid var(--light-gray);
     }
- 
-    .social-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+    .exp-tab {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .15em; text-transform: uppercase;
       color: var(--mid-gray);
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border: 1px solid var(--light-gray);
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      padding: .9rem 1.6rem;
+      cursor: none;
+      border: none; border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      background: none;
+      transition: color .2s, border-color .2s;
     }
- 
-    .social-link:hover {
-      color: var(--white);
-      background: var(--black);
-      border-color: var(--black);
+    .exp-tab.active { color: var(--black); border-bottom-color: var(--black); }
+    .exp-tab:hover:not(.active) { color: var(--dark-gray); }
+
+    .exp-panel { display: none; }
+    .exp-panel.active { display: block; }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 3rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--light-gray);
+      position: relative;
     }
- 
-    .footer-links {
+    .exp-item:last-child { border-bottom: none; }
+    .exp-item::before {
+      content: '';
+      position: absolute;
+      left: -4rem; top: 0; bottom: 0;
+      width: 0;
+      background: var(--off-white);
+      transition: width .35s ease;
+      z-index: -1;
+    }
+    .exp-item:hover::before { width: calc(100% + 8rem); }
+
+    .exp-meta { display: flex; flex-direction: column; gap: .4rem; padding-top: .2rem; }
+    .exp-date {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .62rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--mid-gray);
+    }
+    .exp-company {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .88rem; font-weight: 700;
+      color: var(--black);
+    }
+    .exp-type { font-size: .75rem; color: var(--mid-gray); font-family: 'Raleway', sans-serif; }
+    .exp-role {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--black); margin-bottom: .75rem;
+    }
+    .exp-desc {
+      font-size: .9rem; line-height: 1.85;
+      color: var(--dark-gray); font-family: 'Raleway', sans-serif;
+    }
+
+    /* ══════════════════════════════
+       TEXTOS — dark section
+    ══════════════════════════════ */
+    #textos {
+      background: #0e0e0e;
+      border-top: 1px solid #1e1e1e;
+      position: relative; overflow: hidden;
+    }
+    #textos::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 80% 20%, rgba(90,90,90,.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 15% 85%, rgba(70,70,70,.12) 0%, transparent 50%);
+      animation: gradShift 14s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes gradShift {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .7; transform: scale(1.06); }
+    }
+    #textos .section-label { color: #444; }
+    #textos .section-label::after { background: #2a2a2a; }
+    #textos .section-title { color: #f0f0f0; }
+    #textos .textos-intro { color: #777; }
+
+    .textos-intro {
+      max-width: 560px;
+      font-size: .97rem; line-height: 1.85;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+    .textos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: #1e1e1e;
+      position: relative;
+    }
+    .texto-card {
+      background: #0e0e0e;
+      padding: 2.8rem 2.2rem;
+      position: relative; overflow: hidden;
+      transition: background .35s;
+    }
+    .texto-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.03) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity .35s;
+    }
+    .texto-card:hover { background: #181818; }
+    .texto-card:hover::before { opacity: 1; }
+    .texto-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #444, transparent);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform .4s ease;
+    }
+    .texto-card:hover::after { transform: scaleX(1); }
+
+    .texto-num {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .58rem; font-weight: 700;
+      letter-spacing: .22em; color: #333;
+      margin-bottom: 1.3rem; display: block;
+    }
+    .texto-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: #f0f0f0;
+      margin-bottom: .5rem; line-height: 1.3;
+    }
+    .texto-ref {
+      font-size: .76rem; color: #555;
+      font-family: 'Raleway', sans-serif;
+      margin-bottom: 1.2rem; font-style: italic;
+    }
+    .texto-body {
+      font-size: .88rem; line-height: 1.85;
+      color: #777; font-family: 'Raleway', sans-serif;
+      transition: color .3s;
+    }
+    .texto-card:hover .texto-body { color: #999; }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      padding: 2.8rem 4rem;
+      border-top: 1px solid var(--light-gray);
       display: flex;
-      gap: 1.5rem;
+      justify-content: space-between;
       align-items: center;
+      background: var(--white);
     }
- 
+    .footer-name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900; font-size: .9rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--black);
+    }
+    .footer-links { display: flex; gap: 1.6rem; }
     .footer-link {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--mid-gray);
-      text-decoration: none;
-      transition: color 0.2s;
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--mid-gray); text-decoration: none;
+      position: relative; transition: color .2s;
     }
- 
+    .footer-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--black);
+      transition: width .25s;
+    }
     .footer-link:hover { color: var(--black); }
- 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
+    .footer-link:hover::after { width: 100%; }
+    .footer-copy { font-size: .7rem; color: var(--mid-gray); font-family: 'Raleway', sans-serif; }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 960px) {
       nav { padding: 1.2rem 2rem; }
+      nav.scrolled { padding: .9rem 2rem; }
       section { padding: 5rem 2rem; }
       #hero { padding: 0 2rem; }
+      .hero-rule, .hero-stats { display: none; }
       .sobre-grid { grid-template-columns: 1fr; gap: 3rem; }
-      .textos-grid { grid-template-columns: 1fr; gap: 2px; }
-      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .textos-grid { grid-template-columns: 1fr; }
       .skills-grid { grid-template-columns: 1fr; }
-      .footer-links { flex-direction: column; gap: 0.75rem; }
-      .nav-links { gap: 1.5rem; }
-      .hero-bg-line, .hero-bg-line-2 { display: none; }
+      .exp-item { grid-template-columns: 1fr; gap: .5rem; }
+      .exp-item::before { display: none; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .footer-links { justify-content: center; }
+      body { cursor: auto; }
+      #c-dot, #c-ring { display: none; }
     }
   </style>
 </head>
 <body>
- 
+
+  <!-- CURSOR -->
+  <div id="c-dot"></div>
+  <div id="c-ring"></div>
+
   <!-- NAV -->
-  <nav>
+  <nav id="nav">
     <a href="#hero" class="nav-logo">GCC</a>
     <ul class="nav-links">
       <li><a href="#sobre">Sobre</a></li>
@@ -702,295 +831,294 @@
       <li><a href="#textos">Textos</a></li>
     </ul>
   </nav>
- 
+
   <!-- HERO -->
   <section id="hero">
-    <div class="hero-bg-line"></div>
-    <div class="hero-bg-line-2"></div>
- 
-    <p class="hero-eyebrow">Portfólio — Comunicação & Conteúdo</p>
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+    <div class="particles" id="particles"></div>
+    <div class="hero-rule hero-rule-1"></div>
+    <div class="hero-rule hero-rule-2"></div>
+
+    <p class="hero-eyebrow">Portfólio · Comunicação &amp; Conteúdo</p>
     <h1 class="hero-heading">
-      <span class="typing-wrapper">
-        <span class="typed-text" id="typedText"></span><span class="cursor" id="cursor"></span>
-      </span>
+      <span class="typed-text" id="typedText"></span><span class="cursor-blink"></span>
     </h1>
-    <p class="hero-sub">Comunicação digital, redação, design e tudo que vive entre a palavra escrita e o mundo visual.</p>
-    <a href="#sobre" class="hero-cta">Explorar portfólio</a>
-    <div class="hero-scroll-hint">scroll para descobrir</div>
+    <p class="hero-sub">Escritora. Comunicadora. Criativa.<br>Apaixonada por palavras, design e tudo que vive entre os dois.</p>
+    <div class="hero-actions">
+      <a href="#sobre" class="btn-primary"><span>Explorar portfólio</span></a>
+      <a href="https://www.linkedin.com/in/gabrielacaligares/" target="_blank" class="btn-ghost">LinkedIn ↗</a>
+    </div>
+    <div class="hero-scroll"><div class="scroll-line"></div>scroll</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num" data-target="3">0</span>
+        <span class="hero-stat-label">Idiomas</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num" data-target="5">0</span>
+        <span class="hero-stat-label">Experiências</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num" data-target="4">0</span>
+        <span class="hero-stat-label">Voluntariados</span>
+      </div>
+    </div>
   </section>
- 
-  <!-- SOBRE MIM -->
+
+  <!-- SOBRE -->
   <section id="sobre">
     <p class="section-label reveal">01 — Sobre</p>
     <h2 class="section-title reveal">Quem sou eu.</h2>
     <div class="sobre-grid">
       <div class="sobre-text reveal">
         <p>Olá! Meu nome é <strong>Gabriela Castro Caligares</strong>, tenho 21 anos e moro em Cubatão, SP. Sou uma profissional apaixonada por comunicação digital, com habilidades sólidas em redação, edição de conteúdo, divulgação científica, e-mail marketing e gestão de redes sociais.</p>
-        <p>A escrita sempre foi a minha principal forma de expressão e de me conectar com o mundo. Em 2018, fui aprovada a nível estadual no <strong>47º Concurso Internacional de Redação de Cartas para Jovens</strong>, promovido pela União Postal Universal.</p>
+        <p>A escrita sempre foi a minha principal forma de expressão e de me conectar com o mundo. Em 2018, tive a honra de ser aprovada a nível estadual no <strong>47º Concurso Internacional de Redação de Cartas para Jovens</strong>, promovido pela União Postal Universal.</p>
         <p>Hoje, utilizo a escrita tanto na minha atuação com comunicação corporativa e projetos digitais, quanto no meu tempo livre, compartilhando resenhas literárias e reflexões no Medium.</p>
- 
+        <div class="sobre-award">
+          <p>🏆 Aprovada a nível estadual no 47º Concurso Internacional de Redação de Cartas — União Postal Universal, 2018.</p>
+        </div>
       </div>
+
       <div class="sobre-aside reveal">
- 
-        <!-- IDIOMAS -->
         <div class="aside-card">
           <h4>Idiomas</h4>
-          <div>
-            <div class="lang-item">
+          <div class="lang-row">
+            <div class="lang-top">
               <span class="lang-name">Inglês</span>
               <span class="lang-badge">C2 · TOEIC</span>
             </div>
             <div class="lang-bar"><div class="lang-bar-fill" data-width="100%"></div></div>
- 
-            <div class="lang-item">
+          </div>
+          <div class="lang-row">
+            <div class="lang-top">
               <span class="lang-name">Espanhol</span>
               <span class="lang-badge">B2</span>
             </div>
             <div class="lang-bar"><div class="lang-bar-fill" data-width="75%"></div></div>
- 
-            <div class="lang-item">
+          </div>
+          <div class="lang-row">
+            <div class="lang-top">
               <span class="lang-name">Italiano</span>
               <span class="lang-badge">B2</span>
             </div>
             <div class="lang-bar"><div class="lang-bar-fill" data-width="75%"></div></div>
           </div>
         </div>
- 
-        <!-- INTERESSES -->
+
         <div class="aside-card">
           <h4>Interesses Pessoais</h4>
-          <div class="interest-tags">
+          <div class="interest-tags stagger">
             <span class="interest-tag">Literatura</span>
             <span class="interest-tag">Design Editorial</span>
-            <span class="interest-tag">Fotografia</span>
+            <span class="interest-tag">Fotografia 📷</span>
             <span class="interest-tag">Tipografia</span>
             <span class="interest-tag">Divulgação Científica</span>
-            <span class="interest-tag">Educação Ambiental</span>
             <span class="interest-tag">Resenhas Literárias</span>
+            <span class="interest-tag">Educação Ambiental</span>
             <span class="interest-tag">Medium</span>
             <span class="interest-tag">Behance</span>
-            <span class="interest-tag">Samsung WB100</span>
           </div>
-          <p style="margin-top:1.2rem;font-size:0.85rem;line-height:1.75;color:var(--dark-gray);font-family:'Raleway',sans-serif;">
-            Além da escrita, mantenho um portfólio de design editorial no Behance — reinterpretações de capas de livros inspiradas na paleta melancólica do romantismo, onde a tipografia se torna, ao mesmo tempo, linguagem e imagem.
-          </p>
         </div>
- 
-        <!-- LINKS -->
+
         <div class="aside-card">
           <h4>Encontre-me em</h4>
           <div class="social-links">
-            <a href="https://www.linkedin.com/in/gabrielacaligares/" target="_blank" class="social-link">LinkedIn</a>
-            <a href="https://medium.com/@gabrielaccaligares" target="_blank" class="social-link">Medium</a>
-            <a href="https://www.behance.net/caligares" target="_blank" class="social-link">Behance</a>
+            <a href="https://www.linkedin.com/in/gabrielacaligares/" target="_blank" class="social-link"><span>LinkedIn ↗</span></a>
+            <a href="https://medium.com/@gabrielaccaligares" target="_blank" class="social-link"><span>Medium ↗</span></a>
+            <a href="https://www.behance.net/caligares" target="_blank" class="social-link"><span>Behance ↗</span></a>
           </div>
         </div>
- 
       </div>
     </div>
   </section>
- 
+
   <!-- HABILIDADES -->
   <section id="habilidades">
     <p class="section-label reveal">02 — Habilidades</p>
     <h2 class="section-title reveal">O que sei fazer.</h2>
- 
-    <div class="skills-grid">
-      <div class="skill-group reveal">
-        <h4>Comunicação & Escrita</h4>
+    <div class="skills-grid stagger">
+      <div class="skill-group">
+        <h4>Comunicação &amp; Escrita</h4>
         <div class="skill-tags">
-          <span class="skill-tag">Redação e Edição de Conteúdo</span>
+          <span class="skill-tag">Redação e Edição</span>
           <span class="skill-tag">Comunicação Digital</span>
           <span class="skill-tag">Divulgação Científica</span>
           <span class="skill-tag">Materiais Didáticos</span>
+          <span class="skill-tag">Copywriting</span>
         </div>
       </div>
- 
-      <div class="skill-group reveal">
-        <h4>Estratégia & Pesquisa</h4>
+      <div class="skill-group">
+        <h4>Estratégia &amp; Pesquisa</h4>
         <div class="skill-tags">
           <span class="skill-tag">Fact-checking</span>
           <span class="skill-tag">Pesquisa</span>
           <span class="skill-tag">Gestão de Redes Sociais</span>
           <span class="skill-tag">Email Marketing</span>
+          <span class="skill-tag">Metodologias de Ensino</span>
         </div>
       </div>
- 
-      <div class="skill-group reveal">
-        <h4>Ferramentas & Plataformas</h4>
+      <div class="skill-group">
+        <h4>Ferramentas &amp; Plataformas</h4>
         <div class="skill-tags">
-          <span class="skill-tag">Pacote Office</span>
-          <span class="skill-tag">Google Workspace</span>
           <span class="skill-tag">Figma</span>
           <span class="skill-tag">Adobe Illustrator</span>
           <span class="skill-tag">Photoshop</span>
           <span class="skill-tag">CapCut</span>
           <span class="skill-tag">Mailchimp</span>
           <span class="skill-tag">RD Station</span>
-          <span class="skill-tag">HTML</span>
-          <span class="skill-tag">CSS</span>
+          <span class="skill-tag">Pacote Office</span>
+          <span class="skill-tag">Google Workspace</span>
+          <span class="skill-tag">HTML &amp; CSS</span>
         </div>
       </div>
- 
-      <div class="skill-group reveal">
+      <div class="skill-group">
         <h4>Inteligência Artificial</h4>
         <div class="skill-tags">
           <span class="skill-tag">Gemini</span>
           <span class="skill-tag">ChatGPT</span>
           <span class="skill-tag">Claude</span>
-          <span class="skill-tag">Brainstorming Estrutural</span>
-          <span class="skill-tag">Pesquisa com IA</span>
+          <span class="skill-tag">Brainstorming com IA</span>
+          <span class="skill-tag">Pesquisa Avançada</span>
           <span class="skill-tag">Produtividade Criativa</span>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- EXPERIÊNCIAS -->
   <section id="experiencias">
     <p class="section-label reveal">03 — Experiências</p>
     <h2 class="section-title reveal">Onde já estive.</h2>
- 
     <div class="exp-tabs reveal">
       <button class="exp-tab active" onclick="switchTab('profissional', this)">Profissional</button>
       <button class="exp-tab" onclick="switchTab('voluntariado', this)">Voluntariado</button>
     </div>
- 
-    <!-- PROFISSIONAL -->
+
     <div class="exp-panel active" id="panel-profissional">
-      <div class="exp-list">
-        <div class="exp-item reveal">
-          <div class="exp-meta">
-            <span class="exp-date">Jan 2026 — Atual</span>
-            <span class="exp-company">SAS Brasil</span>
-            <span class="exp-type">Freelancer</span>
-          </div>
-          <div>
-            <p class="exp-role">Auxiliar de Engajamento</p>
-            <p class="exp-desc">Comunicação e relacionamento com a comunidade de voluntários. Apoio na construção de processos seletivos, gestão de inscrições e fortalecimento do engajamento. Participação em ações presenciais, expedições, elaboração de relatórios e acompanhamento de métricas.</p>
-          </div>
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Jan 2026 — Atual</span>
+          <span class="exp-company">SAS Brasil</span>
+          <span class="exp-type">Freelancer</span>
         </div>
- 
-        <div class="exp-item reveal">
-          <div class="exp-meta">
-            <span class="exp-date">Set 2025 — Dez 2025</span>
-            <span class="exp-company">Beta-i Brasil</span>
-            <span class="exp-type">Estágio</span>
-          </div>
-          <div>
-            <p class="exp-role">Estagiária de Comunicação Corporativa e Design</p>
-            <p class="exp-desc">Desenvolvimento da comunicação visual e textual alinhada à identidade da marca. Criação de layouts para campanhas institucionais, novas identidades visuais para programas de inovação, e adaptação de peças para meios digitais, impressos e eventos. Produção e edição de vídeos curtos.</p>
-          </div>
+        <div>
+          <p class="exp-role">Auxiliar de Engajamento</p>
+          <p class="exp-desc">Comunicação e relacionamento com a comunidade de voluntários. Apoio na construção de processos seletivos, gestão de inscrições e fortalecimento do engajamento. Participação em ações presenciais, expedições, elaboração de relatórios e acompanhamento de métricas.</p>
         </div>
- 
-        <div class="exp-item reveal">
-          <div class="exp-meta">
-            <span class="exp-date">Maio 2024 — Abr 2025</span>
-            <span class="exp-company">E-TRUST</span>
-            <span class="exp-type">Estágio</span>
-          </div>
-          <div>
-            <p class="exp-role">Estagiária de Comunicação Corporativa</p>
-            <p class="exp-desc">Em ambiente multicultural, produção e revisão de documentos institucionais com foco em clareza e padronização. Elaboração de guias de apoio e tradução/adaptação de materiais para português, inglês e espanhol.</p>
-          </div>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Set 2025 — Dez 2025</span>
+          <span class="exp-company">Beta-i Brasil</span>
+          <span class="exp-type">Estágio</span>
         </div>
- 
-        <div class="exp-item reveal">
-          <div class="exp-meta">
-            <span class="exp-date">Out 2023 — Dez 2023</span>
-            <span class="exp-company">Ahgas Tecnologia</span>
-            <span class="exp-type">Estágio</span>
-          </div>
-          <div>
-            <p class="exp-role">Estagiária de Comunicação Corporativa</p>
-            <p class="exp-desc">Ponte entre a equipe técnica e os usuários. Criação de materiais didáticos, revisão de textos institucionais e coleta de feedbacks para elaboração de relatórios interpretativos voltados a estratégias de engajamento e fidelização.</p>
-          </div>
+        <div>
+          <p class="exp-role">Estagiária de Comunicação Corporativa e Design</p>
+          <p class="exp-desc">Desenvolvimento da comunicação visual e textual alinhada à identidade da marca. Criação de layouts para campanhas institucionais, novas identidades visuais para programas de inovação, e adaptação de peças para meios digitais, impressos e eventos. Produção e edição de vídeos curtos.</p>
+        </div>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Maio 2024 — Abr 2025</span>
+          <span class="exp-company">E-TRUST</span>
+          <span class="exp-type">Estágio</span>
+        </div>
+        <div>
+          <p class="exp-role">Estagiária de Comunicação Corporativa</p>
+          <p class="exp-desc">Em ambiente multicultural, produção e revisão de documentos institucionais com foco em clareza e padronização. Elaboração de guias de apoio e tradução/adaptação de materiais para português, inglês e espanhol.</p>
+        </div>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Out 2023 — Dez 2023</span>
+          <span class="exp-company">Ahgas Tecnologia</span>
+          <span class="exp-type">Estágio</span>
+        </div>
+        <div>
+          <p class="exp-role">Estagiária de Comunicação Corporativa</p>
+          <p class="exp-desc">Ponte entre a equipe técnica e os usuários. Criação de materiais didáticos, revisão de textos institucionais e coleta de feedbacks para elaboração de relatórios interpretativos voltados a estratégias de engajamento e fidelização.</p>
         </div>
       </div>
     </div>
- 
-    <!-- VOLUNTARIADO -->
+
     <div class="exp-panel" id="panel-voluntariado">
-      <div class="exp-list">
-        <div class="exp-item reveal">
-          <div class="exp-meta">
-            <span class="exp-date">Em andamento</span>
-            <span class="exp-company">My English Diary</span>
-            <span class="exp-type">Voluntária</span>
-          </div>
-          <div>
-            <p class="exp-role">Roteirista</p>
-            <p class="exp-desc">Roteirista do podcast do webnovel My English Diary — primeiro app do estúdio, gratuito e bilíngue, que combina leitura, podcast e atividades para ensinar inglês de forma contextualizada. Escrevo roteiros que acompanham a narrativa do projeto do ponto de vista da protagonista.</p>
-          </div>
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Em andamento</span>
+          <span class="exp-company">My English Diary</span>
+          <span class="exp-type">Voluntária</span>
         </div>
- 
-        <div class="exp-item reveal">
-          <div class="exp-meta">
-            <span class="exp-date">Em andamento</span>
-            <span class="exp-company">#TMJUnicef</span>
-            <span class="exp-type">Voluntária</span>
-          </div>
-          <div>
-            <p class="exp-role">Voluntária de Comunicação</p>
-            <p class="exp-desc">Pesquisa, fact-checking, redação, revisão e edição de newsletters informativas. Apoio em iniciativas de e-mail marketing e participação em programas de desenvolvimento profissional.</p>
-          </div>
+        <div>
+          <p class="exp-role">Roteirista de Podcast</p>
+          <p class="exp-desc">Roteirista do podcast do webnovel My English Diary — primeiro app do estúdio, gratuito e bilíngue, que combina leitura, podcast e atividades para ensinar inglês de forma contextualizada. Escrevo roteiros do ponto de vista da protagonista.</p>
         </div>
- 
-        <div class="exp-item reveal">
-          <div class="exp-meta">
-            <span class="exp-date">Em andamento</span>
-            <span class="exp-company">Reserva Extrativista do Médio Juruá</span>
-            <span class="exp-type">Voluntária</span>
-          </div>
-          <div>
-            <p class="exp-role">Criação de Conteúdo & Assessoria de Imprensa</p>
-            <p class="exp-desc">Gestão de conteúdo para o Instagram da reserva com foco em educação ambiental. Produção de artes, textos para redes sociais, releases e notas oficiais para a imprensa.</p>
-          </div>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Em andamento</span>
+          <span class="exp-company">#TMJUnicef</span>
+          <span class="exp-type">Voluntária</span>
         </div>
- 
-        <div class="exp-item reveal">
-          <div class="exp-meta">
-            <span class="exp-date">Em andamento</span>
-            <span class="exp-company">Instituto SustentAção</span>
-            <span class="exp-type">Voluntária</span>
-          </div>
-          <div>
-            <p class="exp-role">Apoio Logístico & Educação Ambiental</p>
-            <p class="exp-desc">Suporte logístico e administrativo na organização de eventos de mobilização social. Colaboração em atividades de educação ambiental e capacitação de diferentes públicos.</p>
-          </div>
+        <div>
+          <p class="exp-role">Voluntária de Comunicação</p>
+          <p class="exp-desc">Pesquisa, fact-checking, redação, revisão e edição de newsletters informativas. Apoio em iniciativas de e-mail marketing e participação em programas de desenvolvimento profissional.</p>
+        </div>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Em andamento</span>
+          <span class="exp-company">Res. Extr. Médio Juruá</span>
+          <span class="exp-type">Voluntária</span>
+        </div>
+        <div>
+          <p class="exp-role">Conteúdo &amp; Assessoria de Imprensa</p>
+          <p class="exp-desc">Gestão de conteúdo para o Instagram da reserva com foco em educação ambiental. Produção de artes, textos para redes sociais, releases e notas oficiais para a imprensa.</p>
+        </div>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Em andamento</span>
+          <span class="exp-company">Instituto SustentAção</span>
+          <span class="exp-type">Voluntária</span>
+        </div>
+        <div>
+          <p class="exp-role">Apoio Logístico &amp; Educação Ambiental</p>
+          <p class="exp-desc">Suporte logístico e administrativo na organização de eventos de mobilização social. Colaboração em atividades de educação ambiental e capacitação de diferentes públicos.</p>
         </div>
       </div>
     </div>
   </section>
- 
-  <!-- TEXTOS AUTORAIS -->
+
+  <!-- TEXTOS -->
   <section id="textos">
     <p class="section-label reveal">04 — Textos Autorais</p>
     <h2 class="section-title reveal">O que escrevo.</h2>
     <p class="textos-intro reveal">Escrever é a minha maneira de organizar os pensamentos e refletir sobre as leituras que atravessam o meu caminho. Gosto de desbravar a literatura compartilhando impressões ora de forma mais densa, ora de maneira despojada e fluida.</p>
- 
-    <div class="textos-grid">
-      <div class="texto-card reveal">
-        <p class="texto-num">— 01</p>
+    <div class="textos-grid stagger">
+      <div class="texto-card">
+        <span class="texto-num">— 01</span>
         <h3 class="texto-title">Reflexões sobre o Luto</h3>
         <p class="texto-ref">Inspirado em Joan Didion</p>
         <p class="texto-body">Textos emocionais sobre a complexidade e a dor da perda a partir da leitura de ensaios autobiográficos de Didion. A busca por respostas, a sensação de invisibilidade perante a dor e o consolo cruel de descobrir, na literatura, que o luto não é tão singular quanto parece.</p>
       </div>
- 
-      <div class="texto-card reveal">
-        <p class="texto-num">— 02</p>
+      <div class="texto-card">
+        <span class="texto-num">— 02</span>
         <h3 class="texto-title">Análise de Relacionamentos</h3>
         <p class="texto-ref">"Amar é Assim" — Dolly Alderton</p>
         <p class="texto-body">Uma resenha honesta e despojada sobre a bagunça que são os términos e o caos de chegar aos trinta anos. A inteligente narrativa dupla do livro — a autocomiseração de Andy contrastando com a busca de Jen por existir fora de um relacionamento.</p>
       </div>
- 
-      <div class="texto-card reveal">
-        <p class="texto-num">— 03</p>
+      <div class="texto-card">
+        <span class="texto-num">— 03</span>
         <h3 class="texto-title">Traumas e Silêncios</h3>
         <p class="texto-ref">"Carta ao Pai" — Franz Kafka</p>
-        <p class="texto-body">Como as obras literárias funcionam como um espelho dilacerante de lógicas emocionais e dinâmicas familiares. O peso sufocante das palavras não ditas e a tentativa dolorosa de escrever uma resposta a silêncios que, na vida real, nunca são rompidos.</p>
+        <p class="texto-body">Como as obras literárias funcionam como um espelho dilacerante de lógicas emocionais e dinâmicas familiares. O peso das palavras não ditas e a tentativa dolorosa de escrever uma resposta a silêncios que, na vida real, nunca são rompidos.</p>
       </div>
     </div>
   </section>
- 
+
+  <!-- FOOTER -->
   <footer>
     <span class="footer-name">Gabriela Castro Caligares</span>
     <div class="footer-links">
@@ -998,90 +1126,165 @@
       <a href="https://medium.com/@gabrielaccaligares" target="_blank" class="footer-link">Medium</a>
       <a href="https://www.behance.net/caligares" target="_blank" class="footer-link">Behance</a>
     </div>
+    <span class="footer-copy">© 2026 GCC</span>
   </footer>
- 
+
   <script>
-    // ─── TYPING ANIMATION ───
+  (() => {
+    /* ── CURSOR ── */
+    const dot  = document.getElementById('c-dot');
+    const ring = document.getElementById('c-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px';
+      dot.style.top  = my + 'px';
+    });
+    (function animRing() {
+      rx += (mx - rx) * .11;
+      ry += (my - ry) * .11;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animRing);
+    })();
+
+    const hoverTargets = 'a, button, .skill-tag, .interest-tag, .texto-card, .exp-item, .aside-card';
+    document.querySelectorAll(hoverTargets).forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+    document.addEventListener('mousedown', () => document.body.classList.add('clicking'));
+    document.addEventListener('mouseup',   () => document.body.classList.remove('clicking'));
+
+    /* ── PARTICLES ── */
+    const pc = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.cssText = `
+        left: ${Math.random()*100}%;
+        animation-duration: ${7 + Math.random()*13}s;
+        animation-delay: ${-Math.random()*18}s;
+        width: ${1 + Math.random()*2}px;
+        height: ${1 + Math.random()*2}px;
+      `;
+      pc.appendChild(p);
+    }
+
+    /* ── BLOB PARALLAX ── */
+    document.addEventListener('mousemove', e => {
+      const px = (e.clientX / window.innerWidth  - .5) * 22;
+      const py = (e.clientY / window.innerHeight - .5) * 22;
+      document.querySelectorAll('.hero-blob').forEach((b, i) => {
+        const f = .3 + i * .25;
+        b.style.transform = `translate(${px*f}px, ${py*f}px)`;
+      });
+    });
+
+    /* blob self-float */
+    document.querySelectorAll('.hero-blob').forEach((b, i) => {
+      b.style.animation = `blobFloat ${9 + i*2}s ease-in-out ${i*-3}s infinite`;
+    });
+
+    /* ── TYPING ── */
     const phrases = [
-      "oie, eu sou a gabriela! :)",
-      "escritora.",
-      "comunicadora.",
-      "criativa.",
-      "oie, eu sou a gabriela! :)"
+      'oie, eu sou a gabriela! :)',
+      'escritora.',
+      'comunicadora.',
+      'criativa.',
+      'oie, eu sou a gabriela! :)'
     ];
- 
-    let phraseIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typingSpeed = 70;
-    const el = document.getElementById('typedText');
- 
+    let pi = 0, ci = 0, del = false, spd = 75;
+    const typedEl = document.getElementById('typedText');
+
     function type() {
-      const current = phrases[phraseIndex];
- 
-      if (!isDeleting) {
-        el.textContent = current.slice(0, charIndex + 1);
-        charIndex++;
-        if (charIndex === current.length) {
-          // pause at end
-          setTimeout(() => { isDeleting = true; type(); }, phraseIndex === phrases.length - 1 ? 99999 : 1600);
+      const cur = phrases[pi];
+      if (!del) {
+        typedEl.textContent = cur.slice(0, ci + 1);
+        ci++;
+        if (ci === cur.length) {
+          if (pi === phrases.length - 1) return;
+          setTimeout(() => { del = true; type(); }, 1600);
           return;
         }
-        typingSpeed = 70;
+        spd = 72;
       } else {
-        el.textContent = current.slice(0, charIndex - 1);
-        charIndex--;
-        typingSpeed = 40;
-        if (charIndex === 0) {
-          isDeleting = false;
-          phraseIndex = (phraseIndex + 1) % phrases.length;
-          if (phraseIndex === phrases.length - 1) {
-            setTimeout(type, 400);
-            return;
-          }
-          setTimeout(type, 400);
+        typedEl.textContent = cur.slice(0, ci - 1);
+        ci--;
+        spd = 36;
+        if (ci === 0) {
+          del = false;
+          pi = (pi + 1) % phrases.length;
+          setTimeout(type, 360);
           return;
         }
       }
-      setTimeout(type, typingSpeed);
+      setTimeout(type, spd);
     }
- 
-    setTimeout(type, 800);
- 
-    // ─── SCROLL REVEAL ───
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+    setTimeout(type, 900);
+
+    /* ── NAV SCROLL ── */
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    /* ── SCROLL REVEAL ── */
+    const ro = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          ro.unobserve(e.target);
         }
       });
-    }, { threshold: 0.12 });
-    reveals.forEach(el => observer.observe(el));
- 
-    // ─── LANG BARS ANIMATION ───
-    const barObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.querySelectorAll('.lang-bar-fill').forEach(bar => {
-            bar.style.width = bar.getAttribute('data-width');
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal, .stagger').forEach(el => ro.observe(el));
+
+    /* ── LANG BARS ── */
+    const bo = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.lang-bar-fill').forEach(b => {
+            b.style.width = b.dataset.width;
           });
+          bo.unobserve(e.target);
         }
       });
-    }, { threshold: 0.3 });
- 
-    document.querySelectorAll('.aside-card').forEach(card => barObserver.observe(card));
- 
-    // Init bars at 0
-    document.querySelectorAll('.lang-bar-fill').forEach(bar => bar.style.width = '0%');
- 
-    // ─── TABS ───
-    function switchTab(name, btn) {
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.aside-card').forEach(c => bo.observe(c));
+    document.querySelectorAll('.lang-bar-fill').forEach(b => b.style.width = '0%');
+
+    /* ── COUNTERS ── */
+    const co = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('[data-target]').forEach(n => {
+            const target = +n.dataset.target;
+            let cur = 0;
+            const go = () => { n.textContent = ++cur; if (cur < target) setTimeout(go, 130); };
+            setTimeout(go, 500);
+          });
+          co.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    const hs = document.querySelector('.hero-stats');
+    if (hs) co.observe(hs);
+
+    /* ── TABS ── */
+    window.switchTab = (name, btn) => {
       document.querySelectorAll('.exp-panel').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.exp-tab').forEach(t => t.classList.remove('active'));
       document.getElementById('panel-' + name).classList.add('active');
       btn.classList.add('active');
-    }
+      document.querySelectorAll('#panel-' + name + ' .reveal').forEach(el => {
+        el.classList.remove('visible');
+        setTimeout(() => el.classList.add('visible'), 60);
+      });
+    };
+
+  })();
   </script>
 </body>
 </html>
